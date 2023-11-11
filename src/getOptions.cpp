@@ -11,10 +11,16 @@ int getOptions (int argc, char **argv)
 
         opterr = 0;
 
-        while ((op = getopt (argc, argv,"jtfr:")) != -1)
+        while ((op = getopt (argc, argv,"hjtrf")) != -1)
         {
                 switch (op)
                 {
+                        case 'h':
+                                printf(R"(Still in early development
+Usage: %s -j [-t] [-r] [-r] [FILE]...
+)",
+                                argv[0]);
+                                return 0;
                         case 'j':
                                 JSON_OUTPUT = true;
                                 break;
@@ -24,8 +30,8 @@ int getOptions (int argc, char **argv)
                         case 'r':
                                 RATING = true;
                                 break;
-                        case 'c':
-                                cvalue = optarg;
+                        case 'f':
+                                FAVOR = true;
                                 break;
                         case '?':
                                 if (optopt == 'c')
@@ -47,7 +53,11 @@ int getOptions (int argc, char **argv)
                                 abort ();
                 }
         }
-//        printf ("JSON_OUTPUT = %d, TAGS = %d, RATING = %d, FAVOR = %d\n",JSON_OUTPUT, TAGS, RATING, FAVOR);
+        if (! (RATING || TAGS || FAVOR) )
+        {
+                RATING=true,FAVOR=true,TAGS=true;
+        }
+        //printf ("JSON_OUTPUT = %d, TAGS = %d, RATING = %d, FAVOR = %d\n",JSON_OUTPUT, TAGS, RATING, FAVOR);
         if (optind >= argc)
         {
                 fprintf (stderr,"Need to specific at least 1 file\n");
@@ -58,6 +68,23 @@ int getOptions (int argc, char **argv)
                 
                 string filenow=processFileName(argv[index]);
                 string nowcont=readFile(filenow);
+/*
+                int ssize=nowcont.size();
+                for (int p=0;p<ssize;++p)
+                {
+                        if (nowcont[p] == '\n')
+                                printf("\npos=%d\n",p);
+                        else
+                                printf("%c",nowcont[p]);
+                }
+
+                printf("ssize=%d\n",ssize);
+                int pos = nowcont.find("xmp:Rating=\"");
+                if (pos != -1)
+                printf ("Rating=%c\n",nowcont[pos+12]);
+
+                //return 0;
+*/
                 if (JSON_OUTPUT == true)
                 {
                         if  (nowcont != "")

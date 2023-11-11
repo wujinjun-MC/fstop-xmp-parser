@@ -2,7 +2,7 @@
 
 //global variables
 
-        bool JSON_OUTPUT=false,TAGS=true,FAVOR=true,RATING=true;
+        bool JSON_OUTPUT=false,TAGS=false,FAVOR=false,RATING=false;
 
 
 int main(int argc,char *argv[])

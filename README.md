@@ -30,4 +30,18 @@ tar xvf fstop-xmp-parser.tar.gz
 cd fstop-xmp-parser
 ./build.sh
 ```
+## Goals
 
+* Bug fix
+    * Get favorite and rating not currently
+* Algorithm
+    * Add substr and char_position algorithm
+* Features
+    * Support YAML output
+    * Support JSON pretty output
+    * support user-friendly(vanilla) output
+    * Count tags
+    * Edit tags, rating and favorite then write to .xmp file
+    * Write to file
+    * Write to file seperately
+    

@@ -5,6 +5,7 @@ using json = nlohmann::json;
 
 void outputJson()
 {
-        cout << j << endl;
-        return;
+	cout << j << endl;
+	j["Info"]["Avaliable"]=j["Files"].size();
+	return;
 }

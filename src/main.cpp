@@ -1,14 +1,11 @@
 #include "include/main.h"
 
-//global variables
-
-        bool JSON_OUTPUT=false,TAGS=false,FAVOR=false,RATING=false;
-
+//global variables start
+bool JSON_OUTPUT=false,TAGS=false,FAVOR=false,RATING=false;
+int METHOD=3,open_failed_count=0;
+//global variables end
 
 int main(int argc,char *argv[])
 {
-        int return_code=getOptions(argc,argv);
-                return return_code;
-        
-        return 0;
+	return getOptions(argc,argv);
 }

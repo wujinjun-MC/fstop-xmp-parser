@@ -2,10 +2,11 @@
 #define GLOBAL_VARIABLES_H_
 
 //#include <string>
-//#include "../single_include/nlohmann/json.hpp"
+//#include "single_include/nlohmann/json.hpp"
 
 //common variables
 extern bool JSON_OUTPUT,TAGS,FAVOR,RATING;
+extern int METHOD,open_failed_count;
 //extern std::string strRegexMatch;
 //extern nlohmann::json j;
 

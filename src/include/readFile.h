@@ -4,4 +4,6 @@
 #include <streambuf>
 #include <fstream>
 
+#include "global_variables.h"
+
 #endif

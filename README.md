@@ -19,6 +19,8 @@ Options:
 		2: Get "tags","favorite","rating" using "substr()"
 		3: Get "tags" using both of "substr()" and "str[pos]", get "favorite" and "rating" using "str[pos]"
 		Efficiency: 3>2>1
+	-w THREADS: Worker threads, an integer ranging from 1 to 128.\n\
+	-L MAX_FILE_COUNT: Limit file count to MAX_FILE_COUNT\n\
 	-t, -r, -f:	
 		-t: Include tags
 		-r: Include ratings
@@ -61,4 +63,3 @@ cd fstop-xmp-parser
     * Support long options
 * Document
     * Add manpage
-    * Add exit status document

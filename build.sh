@@ -1,3 +1,10 @@
+T=4 # threads
+fifodir=~/.tmp/fifos
+fifoname=${fifodir}/$$.fifo
+mkdir -p $fifodir
+mkfifo $fifoname
+
+
 SRCDIR=./src
 out="fstopxmp"
 
@@ -7,9 +14,21 @@ cmdBuild(){
         echo Compiled "${cppname%.*}".cpp
 }
 
+exec 6<>$fifoname
+
+for ((i=0;i<${T};i++))
+do
+	echo
+done >&6
+
 for cppname in "$SRCDIR"/*.cpp
 do
-        cmdBuild "$@" &
+	read -u6
+	{
+		cmdBuild "$@" 
+		echo >&6
+	}&
+	
 done
 
 wait
@@ -20,3 +39,5 @@ ccache g++ "$SRCDIR"/*.o -o "$out"
 echo Generated '"'"$out"'"'
 echo Clean '*.o'
 rm -v "$SRCDIR"/*.o
+exec 6>&-
+rm -f $fifoname

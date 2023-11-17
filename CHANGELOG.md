@@ -2,7 +2,8 @@
 
 * Add
     * Added multi thread support(-w THREADS)
-* docs/EXIT_CODE.md
+    * Support max file count limit(-L MAX\_FILE\_COUNT)
+* ./docs/EXIT_CODE.md
     * Added docs/EXIT_CODE.md
         * Now exit codes:
 
@@ -10,6 +11,10 @@
 | 0 | Normal exit |
 | 1 | No file opernd |
 | 2 | Option resolve error |
+
+* ./build.sh
+    * SUpport limit compile thread
+
 
 # Version 1.1
 
@@ -20,7 +25,7 @@
 * Edit
     * Changed JSON struture
         * Now per file info stores under 'files' and per-run-time info stores under 'info'
-* README.md
+* ./README.md
     * Added full usage
 
 # Version 1.0.1

@@ -6,6 +6,6 @@
 #include "single_include/nlohmann/json.hpp"
 #include "global_variables.h"
 
-extern nlohmann::json j;
+extern nlohmann::json j_final;
 
 #endif

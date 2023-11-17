@@ -49,8 +49,6 @@ cd fstop-xmp-parser
     * Get favorite and rating not currently
 * Method
     * Add xml\_reader method
-* Efficiency
-    * Support multi thread
 * Features
     * Support YAML output
     * Support JSON pretty output
@@ -62,6 +60,5 @@ cd fstop-xmp-parser
     * Direct read file list from pipe/stdin
     * Support long options
 * Document
-    * Add more help in "-h"/"--help" option
     * Add manpage
     * Add exit status document

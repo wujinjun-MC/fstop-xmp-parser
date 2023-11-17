@@ -1,6 +1,7 @@
 #include "include/getFileInfo.h"
 
 using namespace std;
+using json = nlohmann::json;
 
 regex
 	re1(".*?rdf:li>(.*?)</.*?")
@@ -9,7 +10,7 @@ regex
 */
 ;
 
-void getFileInfo(string fname,string fcontent)
+void getFileInfo(string& fname,string& fcontent,int& th,json& j)
 {
 	if ( TAGS )
 	{
@@ -24,7 +25,7 @@ void getFileInfo(string fname,string fcontent)
 				{
 					break;
 				}
-				storeFileInfo(fname,0,fcontent.substr(l+8,r-l-8));
+				storeFileInfo(j,th,fname,0,fcontent.substr(l+8,r-l-8));
 				if ( METHOD == 3 )
 				{
 					l = r+15;
@@ -41,7 +42,7 @@ void getFileInfo(string fname,string fcontent)
 			sregex_iterator end;
 			while(iter != end)
 			{
-				storeFileInfo(fname,0,(string)(*iter)[1]);
+				storeFileInfo(j,th,fname,0,(string)(*iter)[1]);
 				++iter;
 			}
 		}
@@ -58,7 +59,7 @@ void getFileInfo(string fname,string fcontent)
 				{
 					printf ("RATING");
 					const ssub_match match_1 = match[1];
-					storeFileInfo(fname,1,match_1.str());
+					storeFileInfo(j,th,fname,1,match_1.str());
 				}
 			}
 			if ( FAVOR )
@@ -68,7 +69,7 @@ void getFileInfo(string fname,string fcontent)
 				{
 					printf ("FAVOR");
 					const ssub_match match_1 = match[1];
-					storeFileInfo(fname,2,match_1.str());
+					storeFileInfo(j,th,fname,2,match_1.str());
 				}
 			}
 		}
@@ -79,36 +80,36 @@ void getFileInfo(string fname,string fcontent)
 			{
 				if ( FAVOR )
 				{
-					storeFileInfo(fname,2,fcontent.substr(335,1));
+					storeFileInfo(j,th,fname,2,fcontent.substr(335,1));
 				}
 			}
 			else if ( fcontent[320] == 109 )
 			{
 				if ( RATING )
 				{
-					storeFileInfo(fname,1,fcontent.substr(376,1));
+					storeFileInfo(j,th,fname,1,fcontent.substr(376,1));
 				}
 				if ( FAVOR )
 				{
-					storeFileInfo(fname,2,fcontent.substr(398,1));
+					storeFileInfo(j,th,fname,2,fcontent.substr(398,1));
 				}
 			}
 			else if ( fcontent[320] == 82 )
 			{
 				if ( RATING )
 				{
-					storeFileInfo(fname,1,fcontent.substr(328,1));
+					storeFileInfo(j,th,fname,1,fcontent.substr(328,1));
 				}
 				if ( FAVOR )
 				{
-					storeFileInfo(fname,2,fcontent.substr(350,1));
+					storeFileInfo(j,th,fname,2,fcontent.substr(350,1));
 				}
 			}
 			else
 			{
 				if ( FAVOR )
 				{
-					storeFileInfo(fname,2,fcontent.substr(287,1));
+					storeFileInfo(j,th,fname,2,fcontent.substr(287,1));
 				}
 			}
 		}
@@ -117,12 +118,12 @@ void getFileInfo(string fname,string fcontent)
 			int l=fcontent.find("fstop:favorite=\""),len=fcontent.size();
 			if ( l < len && l != string::npos )
 			{
-				storeFileInfo(fname,2,fcontent.substr(l+16,1));
+				storeFileInfo(j,th,fname,2,fcontent.substr(l+16,1));
 			}
 			l=fcontent.find("xmp:Rating=\"");
 			if ( l < len && l != string::npos )
 			{
-				storeFileInfo(fname,1,fcontent.substr(l+12,1));
+				storeFileInfo(j,th,fname,1,fcontent.substr(l+12,1));
 			}
 		}
 	}

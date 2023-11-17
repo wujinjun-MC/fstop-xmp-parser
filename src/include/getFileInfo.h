@@ -5,9 +5,13 @@
 #include <string>
 
 //#include "single_include/nlohmann/json.hpp"
+#include "single_include/nlohmann/json.hpp"
 #include "global_variables.h"
 
-void storeFileInfo(std::string fname,int section,std::string content);
+using namespace std;
+using json = nlohmann::json;
+
+void storeFileInfo(json& j,int& th,string& fname,int section,string content);
 
 extern int METHOD;
 

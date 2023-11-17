@@ -1,3 +1,16 @@
+# Version 1.2
+
+* Add
+    * Added multi thread support(-w THREADS)
+* docs/EXIT_CODE.md
+    * Added docs/EXIT_CODE.md
+        * Now exit codes:
+
+| Exit_code | Description |
+| 0 | Normal exit |
+| 1 | No file opernd |
+| 2 | Option resolve error |
+
 # Version 1.1
 
 * Add

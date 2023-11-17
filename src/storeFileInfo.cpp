@@ -3,12 +3,12 @@
 using namespace std;
 using json = nlohmann::json;
 
-json j;
+json j_final;
 
-void storeFileInfo(string fname,int section,string content)
+void storeFileInfo(json& j,int& th,string& fname,int section,string content)
 {
 //	fprintf(stderr,"%d %c\n",section,content[0]);
-	if (JSON_OUTPUT )
+	if ( JSON_OUTPUT )
 	{
 		if (!section)
 		{

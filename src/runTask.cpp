@@ -5,7 +5,7 @@ using json = nlohmann::json;
 
 void runTask(string fname,int& th,json& j)
 {
-	string filenow=processFileName(fname);
+	const string filenow=processFileName(fname);
 	string nowcont=readFile(filenow);
 	if  (nowcont != "")
 	{

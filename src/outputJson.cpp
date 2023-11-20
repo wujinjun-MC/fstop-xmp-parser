@@ -3,7 +3,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-void outputJson()
+void outputJson(int& tabs)
 {
 /*
 	for (int i=0;i<threads_num;++i)
@@ -13,6 +13,13 @@ void outputJson()
 	}
 */
 	//cout << j[0] << endl;
-	cout << j_final << endl;
+	if (tabs)
+	{
+		cout << j_final.dump(tabs) << endl;
+	}
+	else
+	{
+		cout << j_final.dump() << endl;
+	}
 	return;
 }

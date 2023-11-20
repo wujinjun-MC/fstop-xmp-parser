@@ -4,6 +4,6 @@
 #include "global_variables.h"
 
 //functions
-int getOptions(int argc, char **argv);
+int getOptions(int argc, char *argv[]);
 
 #endif

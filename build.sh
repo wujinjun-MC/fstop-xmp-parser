@@ -3,15 +3,22 @@ fifodir=~/.tmp/fifos
 fifoname=${fifodir}/$$.fifo
 mkdir -p $fifodir
 mkfifo $fifoname
-
+ISFAILED_FILE=$(tempfile)
 
 SRCDIR=./src
 out="fstopxmp"
 
 cmdBuild(){
-        echo Compiling "${cppname%.*}".cpp
-        ccache g++ $1 -c "${cppname%.*}".cpp -o "${cppname%.*}".o
-        echo Compiled "${cppname%.*}".cpp
+	echo Compiling "${cppname%.*}".cpp
+	if ccache g++ -flto $1 -c "${cppname%.*}".cpp -o "${cppname%.*}".o
+	#ccache g++ $1 -c "${cppname%.*}".cpp -o "${cppname%.*}".o
+	then
+		echo Compiled "${cppname%.*}".cpp
+	else
+		echo Compile "${cppname%.*}".cpp failed
+		return 1
+		#kill $$
+	fi
 }
 
 exec 6<>$fifoname
@@ -25,19 +32,30 @@ for cppname in "$SRCDIR"/*.cpp
 do
 	read -u6
 	{
-		cmdBuild "$@" 
+		cmdBuild "$@" || echo compile_failed > "${ISFAILED_FILE}"
 		echo >&6
 	}&
 	
 done
-
 wait
 echo "Compiled all cpp files."
-echo "Linking"
-ccache g++ "$SRCDIR"/*.o -o "$out"
-
-echo Generated '"'"$out"'"'
-echo Clean '*.o'
-rm -v "$SRCDIR"/*.o
+if ! grep "failed" "$ISFAILED_FILE"
+then
+	echo "Linking"
+	if ccache g++ -flto "$SRCDIR"/*.o -o "$out"
+	then
+		echo Generated '"'"$out"'"'
+		echo Clean '*.o'
+		rm -v "$SRCDIR"/*.o
+	else
+		echo "Linking failed"
+	fi
+	rm -f "$ISFAILED_FILE"
+else
+	echo At least 1 error occured, linking canceled.
+	echo "---- error log [$ISFAILED_FILE] start ----"
+	cat "$ISFAILED_FILE"
+	echo "---- error log end ----"
+fi
 exec 6>&-
 rm -f $fifoname

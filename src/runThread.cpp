@@ -5,7 +5,7 @@ using json = nlohmann::json;
 
 mutex mut;
 
-void runThread(char **argv,int th,int start,int end)
+void runThread(char *argv[],int th,int start,int end)
 {
 	json j;
 	for (int i=start;i<end;++i)

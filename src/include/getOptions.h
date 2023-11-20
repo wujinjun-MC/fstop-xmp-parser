@@ -13,10 +13,12 @@ std::string processFileName(std::string fname);
 std::string readFile(std::string fname);
 std::string getFileInfo(std::string fname,std::string fcontent);
 void storeInfo(int section,int data_int,long data_long,std::string data_string);
-void runThread(char **argv,int th,int start,int end);
-void outputJson();
+void readFileList(char fname[257]);
+void runThread(char *argv[],int th,int start,int end);
+void runThread2(char (*fnamelist)[257],int th,int start,int end);
+void outputJson(int &tabs);
 
 extern std::thread threads[129];
-extern int threads_num;
+extern int threads_num,TABS;
 
 #endif

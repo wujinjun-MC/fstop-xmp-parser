@@ -1,3 +1,12 @@
+# Version 1.3
+* Add
+    * Added file list support(-i)
+* Edit
+    * Changed per-run-time info in json
+* ./build.sh
+    * Enabled "-flto" to optimize linking.
+    * Now it cancel linking when compiling is not passed
+
 # Version 1.2
 
 * Add

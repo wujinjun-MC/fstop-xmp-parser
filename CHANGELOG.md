@@ -1,3 +1,8 @@
+# Version 1.4
+* README.md
+    * Fixed word error in line 67
+        * "recursive" -> "reverse"
+
 # Version 1.3
 * Add
     * Added file list support(-i)
@@ -8,7 +13,6 @@
     * Now it cancel linking when compiling is not passed
 
 # Version 1.2
-
 * Add
     * Added multi thread support(-w THREADS)
     * Support max file count limit(-L MAX\_FILE\_COUNT)
@@ -26,7 +30,6 @@
 
 
 # Version 1.1
-
 * Add
     * Added more methods/algorithms to resolve data
     * Added per-run-time info to JSON: last\_update\_time\_stamp,file\_count,file\_error\_count
@@ -38,7 +41,6 @@
     * Added full usage
 
 # Version 1.0.1
-
 * Add
     * Added rating, favorite information support
 * Fix
@@ -47,5 +49,4 @@
 	* build.sh now added '&' to command support multi thread compile
 
 # Version 1.0
-
 * Initial release

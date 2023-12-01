@@ -21,6 +21,9 @@ void storeInfo(int section,int data_int,long data_long,string data_string)
 			j_final["info"]["RATING"]=RATING;
 			j_final["info"]["READ_FILE_LIST"]=READ_FILE_LIST;
 			j_final["info"]["METHOD"]=METHOD;
+			j_final["info"]["REVERSE_TAGS"]=REVERSE_TAGS;
+			j_final["info"]["REVERSE_FAVOR"]=REVERSE_FAVOR;
+			j_final["info"]["REVERSE_RATING"]=REVERSE_RATING;
 			j_final["info"]["FAVORITE"]=FAVOR;
 			if (MAX_FILE_COUNT)
 			{
@@ -31,8 +34,6 @@ void storeInfo(int section,int data_int,long data_long,string data_string)
 				j_final["info"]["FILE_LIST_COUNT"]=-FILE_LIST_COUNT;
 			}
 			break;
-		default:
-			abort();
 	}
 	
 	return;

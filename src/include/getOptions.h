@@ -14,8 +14,8 @@ std::string readFile(std::string fname);
 std::string getFileInfo(std::string fname,std::string fcontent);
 void storeInfo(int section,int data_int,long data_long,std::string data_string);
 void readFileList(char fname[257]);
-void runThread(char *argv[],int th,int start,int end);
-void runThread2(char (*fnamelist)[257],int th,int start,int end);
+void runThread(int th,char *argv[],int start,int end);
+void runThread2(int th,int start,int end);
 void outputJson(int &tabs);
 
 extern std::thread threads[129];

@@ -5,13 +5,13 @@ using json = nlohmann::json;
 
 //mutex mut2;
 
-void runThread2(char (*fnamelist)[257],int th,int start,int end)
+void runThread2(int th,int start,int end)
 {
 	json j;
 	for (int i=start;i<end;++i)
 	{
-		runTask(fnames[i],th,j);
+		runTask(fnames[i],j);
 	}
-	mergeJson(j);
+	mergeJson(th,j);
 	return;
 }

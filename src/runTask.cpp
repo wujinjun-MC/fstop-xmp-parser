@@ -3,14 +3,14 @@
 using namespace std;
 using json = nlohmann::json;
 
-void runTask(string fname,int& th,json& j)
+void runTask(string fname,json& j)
 {
-	const string filenow=processFileName(fname);
+	string filenow=processFileName(fname);
 	string nowcont=readFile(filenow);
 	if  (nowcont != "")
 	{
 		//printf("\n");
-		getFileInfo(fname,nowcont,th,j);
+		getFileInfo(fname,nowcont,j);
 	}
 	return;
 }

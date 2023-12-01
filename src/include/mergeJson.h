@@ -1,6 +1,7 @@
 #ifndef MERGEJSON_H_
 #define MERGEJSON_H_
 
+#include <iostream>
 #include <mutex>
 
 #include "single_include/nlohmann/json.hpp"

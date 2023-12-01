@@ -4,10 +4,101 @@
 
 using namespace std;
 
+static bool hasOption_o=false;
+
 char fnames[500000][257];
 const char (*fnamesp)[257]=fnames;
 
 thread threads[129];
+
+inline void processOUTPUTOPTIONS(char *o)
+{
+	int olen=strlen(o);
+	//printf ("outopts.len=%d\noutopts=%s\n",olen,o);
+	if (!olen)
+	{
+		hasOption_o=false;
+		return;
+	}
+	int opos=0;
+	while (opos < olen)
+	{
+		
+		//printf ("pos=%d\n%c\n",opos,o[opos]);
+		switch(o[opos++])
+		{
+			case 'r':
+				switch(o[opos++])
+				{
+					
+					case 't':
+						//printf ("pos=%d\n%d\n",opos-1,o[opos-1]);
+						switch(o[opos++])
+						{
+							case ',':
+							case 0:
+								//printf ("pos=%d\n%d\n",opos-1,o[opos-1]);
+								REVERSE_TAGS=true;
+								break;
+						}
+						break;
+					case 'f':
+						switch(o[opos++])
+						{
+							case ',':
+							case 0:
+								REVERSE_FAVOR=true;
+								break;
+						}
+						break;
+					case 'r':
+						switch(o[opos++])
+						{
+							case ',':
+							case 0:
+								REVERSE_RATING=true;
+								break;
+						}
+						break;
+					case ',':
+							case 0:
+						RATING=true;
+						break;
+				}
+				break;
+			case 'f':
+				switch(o[opos++])
+				{
+					case ',':
+					case 0:
+						FAVOR=true;
+						break;
+				}
+				break;
+			case 't':
+				switch(o[opos++])
+				{
+					case ',':
+					case 0:
+						TAGS=true;
+						break;
+				}
+				break;
+			case 'i':
+				switch(o[opos++])
+				{
+					case ',':
+					case 0:
+						INFO=false;
+						break;
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	return;
+}
 
 int getOptions (int argc, char *argv[])
 {
@@ -17,27 +108,25 @@ int getOptions (int argc, char *argv[])
 
 	opterr = 0;
 
-	while ((op = getopt (argc, argv,"hjtrfT:m:w:L:i")) != -1)
+	while ((op = getopt (argc, argv,"hjo:T:m:w:L:i")) != -1)
 	{
 	    //printf("start getopt()\n");
 		switch (op)
 		{
 			case 'h':
+/*
 				printf(R"(Still in early development
 )");
+*/
 				printHelp();
 				return 0;
 			case 'j':
 				JSON_OUTPUT = true;
 				break;
-			case 't':
-				TAGS = true;
-				break;
-			case 'r':
-				RATING = true;
-				break;
-			case 'f':
-				FAVOR = true;
+			case 'o':
+				//printf("-o %s\n",optarg);
+				hasOption_o=true;
+				processOUTPUTOPTIONS(optarg);
 				break;
 			case 'T':
 				TABS = atoi(optarg);
@@ -61,7 +150,7 @@ int getOptions (int argc, char *argv[])
 				READ_FILE_LIST = true;
 				break;
 			case '?':
-				if (optopt == 'T' || optopt == 'm' || optopt == 'w' || optopt == 'L')
+				if (optopt == 'T' || optopt == 'm' || optopt == 'w' || optopt == 'L' || optopt == 'o' )
 				{
 					fprintf (stderr,"Option -%c requires an argument.\n", optopt);
 				}
@@ -78,21 +167,26 @@ int getOptions (int argc, char *argv[])
 				abort ();
 		}
 	}
+	if ( threads_num > 1 && ( REVERSE_RATING || REVERSE_TAGS || REVERSE_FAVOR ) )
+	{
+		fprintf(stderr,"Conflicted options or option arguments: \"Multi thread\" feature implies \"Reverse info\" feature.\n");
+		return 3;
+	}
 	/*
 	for (int i=0;i<argc;++i)
 		printf("argv[%d]=%s\n",i,argv[i]);
 	*/
-	if (! (RATING || TAGS || FAVOR) )
+	if (!hasOption_o)
 	{
-		RATING=true,FAVOR=true,TAGS=true;
+		RATING=true,FAVOR=true,TAGS=true,INFO=true;
 	}
+	
 	//printf ("JSON_OUTPUT = %d, TAGS = %d, RATING = %d, FAVOR = %d\n",JSON_OUTPUT, TAGS, RATING, FAVOR);
 	if (optind >= argc)
 	{
 		fprintf (stderr,"%s: missing file operand\nTry \'%s -h\' for more information.\n",argv[0],argv[0]);
 		return 1;
 	}
-	storeInfo(0,0,time(0),"");
 	if (READ_FILE_LIST)
 	{
 		FILE_LIST_COUNT=optind-argc;
@@ -108,7 +202,10 @@ int getOptions (int argc, char *argv[])
 		{
 			threads_num=FILE_COUNT;
 		}
-		storeInfo(1,FILE_COUNT,0,"");
+		if ( INFO )
+		{
+			storeInfo(1,FILE_COUNT,0,"");
+		}
 		if ( threads_num > 1 )
 		{
 			int step = FILE_COUNT / threads_num;
@@ -121,7 +218,7 @@ int getOptions (int argc, char *argv[])
 					end = FILE_COUNT+1;
 				}
 				//fprintf(stderr,"st=%d,end=%d\n",st,end);
-				threads[i] = thread(runThread2,fnames,i,st,end);
+				threads[i] = thread(runThread2,i,st,end);
 			}
 			for (int i = 0; i < threads_num; ++i)
 			{
@@ -130,7 +227,7 @@ int getOptions (int argc, char *argv[])
 		}
 		else
 		{
-			runThread2(fnames,0,1,FILE_COUNT+1);
+			runThread2(0,1,FILE_COUNT+1);
 		}
 	}
 	else
@@ -140,12 +237,15 @@ int getOptions (int argc, char *argv[])
 			argc = MAX_FILE_COUNT + optind;
 		}
 		//printf ("argc=%d,argc-optind=%d\n",argc,argc-optind);
-		storeInfo(1,argc-optind,0,"");
 	
 		//argc=optind+3;
 		if ( argc-optind < threads_num )
 		{
 			threads_num=argc-optind;
+		}
+		if ( INFO )
+		{
+			storeInfo(1,argc-optind,0,"");
 		}
 		//fprintf(stderr,"argc-optind=%d,threads_num=%d\n",argc-optind,threads_num);
 		if ( threads_num > 1 )
@@ -162,7 +262,7 @@ int getOptions (int argc, char *argv[])
 					end = data_size+optind;
 				}
 				//fprintf(stderr,"st=%d,end=%d\n",st,end);
-				threads[i] = thread(runThread,argv,i,st,end);
+				threads[i] = thread(runThread,i,argv,st,end);
 			}
 			//threads[threads_num-1] = thread(runThread,argv,threads_num-1,(threads_num-1)*step+optind,argc-1);
 			//printf("threads[%d] = thread(runThread,argv,%d,%d,%d);\n",threads_num-1,threads_num-1,(threads_num-1)*step+optind,argc-1);
@@ -174,7 +274,7 @@ int getOptions (int argc, char *argv[])
 		}
 		else
 		{
-			runThread(argv,0,optind,argc);
+			runThread(0,argv,optind,argc);
 	/*
 			for (index = optind; index < argc; index++)
 			{
@@ -192,9 +292,15 @@ int getOptions (int argc, char *argv[])
 		}
 	}
 	//storeInfo(2,open_failed_count,0,"");
-	storeInfo(4,0,0,"");
-	storeInfo(3,threads_num,0,"");
-	if (JSON_OUTPUT == true)
+	//printf("INFO=%d\n",INFO);
+	if ( INFO )
+	{
+		storeInfo(4,0,0,"");
+		storeInfo(3,threads_num,0,"");
+		storeInfo(0,0,time(0),"");
+		
+	}
+		if (JSON_OUTPUT == true)
 	{
 		outputJson(TABS);
 	}

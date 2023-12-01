@@ -4,7 +4,7 @@
   <rdf:Description rdf:about=""
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:fstop="http://www.fstopapp.com/xmp/"
-   fstop:favorite="0">
+   fstop:favorite="1">
    <dc:subject>
     <rdf:Bag>
      <rdf:li>foo</rdf:li>

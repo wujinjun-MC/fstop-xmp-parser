@@ -10,9 +10,9 @@ regex
 */
 ;
 
-void getFileInfo(string& fname,string& fcontent,int& th,json& j)
+void getFileInfo(string& fname,string& fcontent,json& j)
 {
-	if ( TAGS )
+	if ( TAGS || REVERSE_TAGS )
 	{
 		if ( METHOD == 3 || METHOD == 2 )
 		{
@@ -25,7 +25,7 @@ void getFileInfo(string& fname,string& fcontent,int& th,json& j)
 				{
 					break;
 				}
-				storeFileInfo(j,th,fname,0,fcontent.substr(l+8,r-l-8));
+				storeFileInfo(j,fname,0,fcontent.substr(l+8,r-l-8));
 				if ( METHOD == 3 )
 				{
 					l = r+15;
@@ -42,91 +42,75 @@ void getFileInfo(string& fname,string& fcontent,int& th,json& j)
 			sregex_iterator end;
 			while(iter != end)
 			{
-				storeFileInfo(j,th,fname,0,(string)(*iter)[1]);
+				storeFileInfo(j,fname,0,(string)(*iter)[1]);
 				++iter;
 			}
 		}
 	}
-	if ( RATING || FAVOR )
+	if ( RATING || FAVOR || REVERSE_FAVOR || REVERSE_RATING )
 	{
-/*
-		if ( METHOD == 1 )
-		{
-			if ( RATING )
-			{
-				smatch match;
-				if ( regex_match ( fcontent,match,re2 ) )
-				{
-					printf ("RATING");
-					const ssub_match match_1 = match[1];
-					storeFileInfo(j,th,fname,1,match_1.str());
-				}
-			}
-			if ( FAVOR )
-			{
-				smatch match;
-				if ( regex_match ( fcontent,match,re3 ) )
-				{
-					printf ("FAVOR");
-					const ssub_match match_1 = match[1];
-					storeFileInfo(j,th,fname,2,match_1.str());
-				}
-			}
-		}
-*/
 		if ( METHOD == 3 )
 		{
 			if ( fcontent[320] == 115 )
 			{
-				if ( FAVOR )
+				if ( FAVOR || REVERSE_FAVOR )
 				{
-					storeFileInfo(j,th,fname,2,fcontent.substr(335,1));
+					storeFileInfo(j,fname,2,fcontent.substr(335,1));
 				}
 			}
 			else if ( fcontent[320] == 109 )
 			{
-				if ( RATING )
+				if ( RATING || REVERSE_RATING )
 				{
-					storeFileInfo(j,th,fname,1,fcontent.substr(376,1));
+					storeFileInfo(j,fname,1,fcontent.substr(376,1));
 				}
-				if ( FAVOR )
+				if ( FAVOR || REVERSE_FAVOR )
 				{
-					storeFileInfo(j,th,fname,2,fcontent.substr(398,1));
+					storeFileInfo(j,fname,2,fcontent.substr(398,1));
 				}
 			}
 			else if ( fcontent[320] == 82 )
 			{
-				if ( RATING )
+				if ( RATING || REVERSE_RATING )
 				{
-					storeFileInfo(j,th,fname,1,fcontent.substr(328,1));
+					storeFileInfo(j,fname,1,fcontent.substr(328,1));
 				}
-				if ( FAVOR )
+				if ( FAVOR || REVERSE_FAVOR )
 				{
-					storeFileInfo(j,th,fname,2,fcontent.substr(350,1));
+					storeFileInfo(j,fname,2,fcontent.substr(350,1));
 				}
 			}
 			else
 			{
-				if ( FAVOR )
+				if ( FAVOR || REVERSE_FAVOR )
 				{
-					storeFileInfo(j,th,fname,2,fcontent.substr(287,1));
+					storeFileInfo(j,fname,2,fcontent.substr(287,1));
 				}
 			}
 		}
 		else
 		{
-			int l=fcontent.find("fstop:favorite=\""),len=fcontent.size();
-			if ( l < len && l != string::npos )
+			int len=fcontent.size();
+			int l;
+			if ( FAVOR || REVERSE_FAVOR )
 			{
-				storeFileInfo(j,th,fname,2,fcontent.substr(l+16,1));
+				l=fcontent.find("fstop:favorite=\"");
+				if ( l < len && l != string::npos )
+				{
+					storeFileInfo(j,fname,2,fcontent.substr(l+16,1));
+				}
 			}
-			l=fcontent.find("xmp:Rating=\"");
-			if ( l < len && l != string::npos )
+			if ( RATING || REVERSE_RATING )
 			{
-				storeFileInfo(j,th,fname,1,fcontent.substr(l+12,1));
+				l=fcontent.find("xmp:Rating=\"");
+				if ( l < len && l != string::npos )
+				{
+					storeFileInfo(j,fname,1,fcontent.substr(l+12,1));
+				}
 			}
 		}
 	}
+	//storeFileInfo(j,fname,3,"");
 	return;
 }
 

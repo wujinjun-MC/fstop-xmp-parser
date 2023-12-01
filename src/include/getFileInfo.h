@@ -11,7 +11,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-void storeFileInfo(json& j,int& th,string& fname,int section,string content);
+void storeFileInfo(json& j,string& fname,int section,string content);
 
 extern int METHOD;
 

@@ -10,8 +10,8 @@
 using namespace std;
 using json = nlohmann::json;
 
-void runTask(string fname,int& th,json& j);
-void mergeJson(json& j);
+void runTask(string fname,json& j);
+void mergeJson(int& th,json& j);
 
 extern int threads_num;
 extern char fnames[500000][257];

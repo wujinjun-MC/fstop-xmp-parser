@@ -10,12 +10,12 @@ out="fstopxmp"
 
 cmdBuild(){
 	echo Compiling "${cppname%.*}".cpp
-	if ccache g++ -flto $1 -c "${cppname%.*}".cpp -o "${cppname%.*}".o
+	if ccache g++ $1 -c "${cppname%.*}".cpp -o "${cppname%.*}".o
 	#ccache g++ $1 -c "${cppname%.*}".cpp -o "${cppname%.*}".o
 	then
 		echo Compiled "${cppname%.*}".cpp
 	else
-		echo Compile "${cppname%.*}".cpp failed
+		echo Compile "${cppname%.*}".cpp failed | tee -a $ISFAILED_FILE
 		return 1
 		#kill $$
 	fi
@@ -32,7 +32,7 @@ for cppname in "$SRCDIR"/*.cpp
 do
 	read -u6
 	{
-		cmdBuild "$@" || echo compile_failed > "${ISFAILED_FILE}"
+		cmdBuild "$@"
 		echo >&6
 	}&
 	
@@ -42,7 +42,7 @@ echo "Compiled all cpp files."
 if ! grep "failed" "$ISFAILED_FILE"
 then
 	echo "Linking"
-	if ccache g++ -flto "$SRCDIR"/*.o -o "$out"
+	if ccache g++ $1 "$SRCDIR"/*.o -o "$out"
 	then
 		echo Generated '"'"$out"'"'
 		echo Clean '*.o'

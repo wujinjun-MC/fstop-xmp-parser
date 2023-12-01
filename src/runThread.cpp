@@ -5,13 +5,13 @@ using json = nlohmann::json;
 
 mutex mut;
 
-void runThread(char *argv[],int th,int start,int end)
+void runThread(int th,char *argv[],int start,int end)
 {
 	json j;
 	for (int i=start;i<end;++i)
 	{
-		runTask(argv[i],th,j);
+		runTask(argv[i],j);
 	}
-	mergeJson(j);
+	mergeJson(th,j);
 	return;
 }

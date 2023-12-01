@@ -132,7 +132,12 @@ int getOptions (int argc, char *argv[])
 				TABS = atoi(optarg);
 				break;
 			case 'm':
-				METHOD = optarg[0]-48;
+				METHOD = atoi(optarg);
+				if ( METHOD > 2 || METHOD < 1 )
+				{
+					fprintf ( stderr,"Invalid METHOD: METHOD is an integer ranging from 1 to 2\n");
+					return 2;
+				}
 				//printf ("METHOD%d\n",METHOD);
 				break;
 			case 'w':
@@ -201,10 +206,6 @@ int getOptions (int argc, char *argv[])
 		if ( FILE_COUNT < threads_num )
 		{
 			threads_num=FILE_COUNT;
-		}
-		if ( INFO )
-		{
-			storeInfo(1,FILE_COUNT,0,"");
 		}
 		if ( threads_num > 1 )
 		{
@@ -298,6 +299,10 @@ int getOptions (int argc, char *argv[])
 		storeInfo(4,0,0,"");
 		storeInfo(3,threads_num,0,"");
 		storeInfo(0,0,time(0),"");
+		if ( READ_FILE_LIST )
+		{
+			storeInfo(1,FILE_COUNT,0,"");
+		}
 		
 	}
 		if (JSON_OUTPUT == true)

@@ -3,6 +3,8 @@
 
 #include <regex>
 #include <string>
+#include <streambuf>
+#include <fstream>
 
 //#include "single_include/nlohmann/json.hpp"
 #include "single_include/nlohmann/json.hpp"
@@ -11,9 +13,9 @@
 using namespace std;
 using json = nlohmann::json;
 
-void storeFileInfo(json& j,string& fname,int section,string content);
-
 extern int METHOD;
+
+void storeFileInfo(json& j,string& fname,int section,string content);
 
 //extern nlohmann::json j;
 

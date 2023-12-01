@@ -2,90 +2,100 @@
 
 using namespace std;
 using json = nlohmann::json;
-
+/*
 regex
 	re1(".*?rdf:li>(.*?)</.*?")
-/*	,re2(".*?xmp(.*?)Rating/.*?")
+	,re2(".*?xmp(.*?)Rating/.*?")
 	,re3(".*?fstop:favorite=\\\"(.*?)\\\"/.*?")
-*/
 ;
+*/
 
-void getFileInfo(string& fname,string& fcontent,json& j)
+inline void readFile(string& cont,string fname)
 {
+	ifstream in(fname);
+	if (!in)
+	{
+		fprintf(stderr,"Can't Open File \"%s\"\n",fname.c_str());
+		//++open_failed_count;
+		return;
+	}
+	cont=string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+	in.close();
+	return;
+}
+
+void getFileInfo(string fname,json& j)
+{
+/*
+	fname.erase(fname.rfind("."),fname.size());
+	fname += ".xmp";
+*/
+	string fcontent,fxmpname = fname.substr(0,fname.rfind(".")) + ".xmp";
+	readFile(fcontent,fxmpname);
+	if ( fcontent == "" )
+	{
+		return;
+	}
 	if ( TAGS || REVERSE_TAGS )
 	{
-		if ( METHOD == 3 || METHOD == 2 )
+		int l=fcontent.find(R"(<rdf:li>)"),r,len=fcontent.size();
+		while ( l < len )
 		{
-			int l=fcontent.find(R"(<rdf:li>)"),r,len=fcontent.size();
-			while ( l < len )
+			r = fcontent.find(R"(</rdf:li)",l);
+	
+			if ( r == string::npos )
 			{
-				r = fcontent.find(R"(</rdf:li)",l);
-
-				if ( r == string::npos )
-				{
-					break;
-				}
-				storeFileInfo(j,fname,0,fcontent.substr(l+8,r-l-8));
-				if ( METHOD == 3 )
-				{
-					l = r+15;
-				}
-				else
-				{
-					l=fcontent.find(R"(<rdf:li>)",r+5);
-				}
+				break;
 			}
-		}
-		else
-		{
-			sregex_iterator iter(fcontent.begin(), fcontent.end(), re1);
-			sregex_iterator end;
-			while(iter != end)
+			storeFileInfo(j,fname,0,fcontent.substr(l+8,r-l-8));
+			if ( METHOD == 3 )
 			{
-				storeFileInfo(j,fname,0,(string)(*iter)[1]);
-				++iter;
+				l = r+15;
+			}
+			else
+			{
+				l=fcontent.find(R"(<rdf:li>)",r+5);
 			}
 		}
 	}
 	if ( RATING || FAVOR || REVERSE_FAVOR || REVERSE_RATING )
 	{
-		if ( METHOD == 3 )
+		if ( METHOD == 2 )
 		{
-			if ( fcontent[320] == 115 )
+			switch ( fcontent[320] )
 			{
-				if ( FAVOR || REVERSE_FAVOR )
-				{
-					storeFileInfo(j,fname,2,fcontent.substr(335,1));
-				}
-			}
-			else if ( fcontent[320] == 109 )
-			{
-				if ( RATING || REVERSE_RATING )
-				{
-					storeFileInfo(j,fname,1,fcontent.substr(376,1));
-				}
-				if ( FAVOR || REVERSE_FAVOR )
-				{
-					storeFileInfo(j,fname,2,fcontent.substr(398,1));
-				}
-			}
-			else if ( fcontent[320] == 82 )
-			{
-				if ( RATING || REVERSE_RATING )
-				{
-					storeFileInfo(j,fname,1,fcontent.substr(328,1));
-				}
-				if ( FAVOR || REVERSE_FAVOR )
-				{
-					storeFileInfo(j,fname,2,fcontent.substr(350,1));
-				}
-			}
-			else
-			{
-				if ( FAVOR || REVERSE_FAVOR )
-				{
-					storeFileInfo(j,fname,2,fcontent.substr(287,1));
-				}
+				case 115:
+					if ( FAVOR || REVERSE_FAVOR )
+					{
+						storeFileInfo(j,fname,2,fcontent.substr(335,1));
+					}
+					break;
+				case 109:
+					if ( RATING || REVERSE_RATING )
+					{
+						storeFileInfo(j,fname,1,fcontent.substr(376,1));
+					}
+					if ( FAVOR || REVERSE_FAVOR )
+					{
+						storeFileInfo(j,fname,2,fcontent.substr(398,1));
+					}
+					break;
+				case 82:
+					if ( RATING || REVERSE_RATING )
+					{
+						storeFileInfo(j,fname,1,fcontent.substr(328,1));
+					}
+					if ( FAVOR || REVERSE_FAVOR )
+					{
+						storeFileInfo(j,fname,2,fcontent.substr(350,1));
+					}
+					break;
+				default:
+					if ( FAVOR || REVERSE_FAVOR )
+					{
+						storeFileInfo(j,fname,2,fcontent.substr(287,1));
+					}
+					break;
 			}
 		}
 		else

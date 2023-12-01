@@ -4,11 +4,10 @@ const char HELP_TEXT[]="fstopxmp -j [-T TABS] [-m METHOD] [-w THREADS] [-L MAX_F
 Options:\n\
     -j                   JSON output\n\
     -T TABS              Enable JSON pretty output with TABS tabs for each indentation level.\n\
-    -m METHOD            Choose getFileInfo() method, default is 3. The avaliable METHODs are:\n\
-                             1    Get \"tags\" using regex, get \"favorite\" and \"rating\" using \"substr()\"\n\
-                             2    Get \"tags\",\"favorite\",\"rating\" using \"substr()\"\n\
-                             3    Get \"tags\" using both of \"substr()\" and \"str[pos]\", get \"favorite\" and \"rating\" using \"str[pos]\"\n\\n\
-                             (Tested efficiency: 3>2>1)\n\
+    -m METHOD            Choose getFileInfo() method, default is 2. The avaliable METHODs are:\n\
+                             1    Get \"tags\",\"favorite\",\"rating\" using \"substr()\"\n\
+                             2   Get \"tags\" using both of \"substr()\" and \"str[pos]\", get \"favorite\" and \"rating\" using \"str[pos]\"\n\\n\
+                             (Tested efficiency: 2>1)\n\
     -w THREADS           Worker threads, an integer ranging from 1 to 128. Implies any reverse features.\n\
     -L MAX_FILE_COUNT    Limit file count to MAX_FILE_COUNT\n\
     -i                   Read from file list. Treat FILE as newline-seperated file name(s). If \"-\" is given, read from standard input.\n\

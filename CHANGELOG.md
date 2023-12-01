@@ -1,3 +1,9 @@
+# Version 1.4.1
+* Optimize
+    * Removed or merged functions
+* Removed
+    * Removed regex method (too slow and unnecessary)
+
 # Version 1.4
 * README.md
     * Fixed word error in line 67

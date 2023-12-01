@@ -3,9 +3,10 @@
 using namespace std;
 using json = nlohmann::json;
 
+mutex mut;
+
 void mergeJson(int& th,json& j)
 {
-	lock_guard<mutex> lk(mut);
 	if (j.empty())
 	{
 		return;
@@ -14,6 +15,9 @@ void mergeJson(int& th,json& j)
 	cout << "json from thread " << th << ":" << endl;
 	cout << j.dump(1) << endl;
 */
+	//lock_guard<mutex> lk(mut);
+	mut.lock();
 	j_final.merge_patch(j);
+	mut.unlock();
 	return;
 }

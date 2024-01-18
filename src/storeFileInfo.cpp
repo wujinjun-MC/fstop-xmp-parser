@@ -29,7 +29,7 @@ void storeFileInfo(json& j,string& fname,int section,string content)
 				}
 				if ( REVERSE_RATING )
 				{
-					j["items"]["ratings"][content[0]-48].push_back(fname);
+					j["items"]["ratings"][content].push_back(fname);
 				}
 				break;
 			case 2:

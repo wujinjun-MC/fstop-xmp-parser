@@ -60,6 +60,7 @@ cd fstop-xmp-parser
 * Method
     * Add xml\_reader method
 * Features
+    * Add comparison mode. Input previous json file and scan file and check wether they change or not.
     * Add status counter
     * Add interactive mode to directly view and edit info, or preview media in your terminal, or open in x11 desktop
     * Support YAML output

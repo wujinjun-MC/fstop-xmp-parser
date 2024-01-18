@@ -1,4 +1,5 @@
 | Exit_code | Description | Example |
+| --------- | ----------- | ------- |
 | 0 | Normal exit | ./fstopxmp -j test/test1.xmp |
 | 1 | No file opernd | - |
 | 2 | Option resolve error | - |

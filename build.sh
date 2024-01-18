@@ -1,4 +1,6 @@
-T=4 # threads
+# threads
+T=4 
+
 fifodir=~/.tmp/fifos
 fifoname=${fifodir}/$$.fifo
 mkdir -p $fifodir
@@ -21,9 +23,19 @@ cmdBuild(){
 	fi
 }
 
+onExitScript()
+{
+	exit
+}
+
+# Script main start
+
+trap 'onExitScript' SIGINT
+trap 'onExitScript' SIGTERM
+
 exec 6<>$fifoname
 
-for ((i=0;i<${T};i++))
+for i in $(seq 1 $T)
 do
 	echo
 done >&6
